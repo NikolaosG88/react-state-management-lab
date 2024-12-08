@@ -1,11 +1,12 @@
 // src/App.jsx
 
-import React from "react";
+import React, { useState } from "react";
+import './App.css';
 
 const App = () => {
 
-  const [team, setTeam] =  useState([]);
-  const [money, setMoney] =  useState(100);
+  const [team, setTeam] = useState([]);
+  const [money, setMoney] = useState(100);
   const [zombieFighters, setZombieFighters] = useState([
     {
       name: 'Survivor',
@@ -79,11 +80,48 @@ const App = () => {
     },
   ]);
 
-  
+ 
+  let totalPrice = 0;
+  for (let i = 0; i < zombieFighters.length; i++) {
+    totalPrice += zombieFighters[i].price;
+  }
+
+
+  const [currentPrice, setCurrentPrice] = useState(totalPrice);
+
+  const handleAddFighter = (fighter) => {
+    setTeam((prevTeam) => [...prevTeam, fighter]); 
+    setMoney((prevMoney) => prevMoney - fighter.price); 
+    setCurrentPrice((prevTotal) => prevTotal - fighter.price); 
+  };
 
   return (
-    <h1>Hello world!</h1>
+    <div>
+      <h1>Zombie Fighters</h1>
+      <h2>Initial Total Price: {totalPrice} £</h2> 
+      <h2>Current Total Price: {currentPrice} £</h2> 
+      <h2>Available Money: {money} £</h2> 
+      <ul>
+        {zombieFighters.map((fighter, index) => (
+          <li key={index}>
+            <img src={fighter.img} alt={fighter.name} />
+            <p><strong>Name:</strong> {fighter.name}</p>
+            <p><strong>Price:</strong> {fighter.price} £</p>
+            <p><strong>Strength:</strong> {fighter.strength}</p>
+            <p><strong>Agility:</strong> {fighter.agility}</p>
+            <button onClick={() => handleAddFighter(fighter)}>Add Fighter</button>
+          </li>
+        ))}
+      </ul>
+
+      <h2>Your Team</h2>
+      <ul>
+        {team.map((fighter, index) => (
+          <li key={index}>{fighter.name}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
-export default App
+export default App;
