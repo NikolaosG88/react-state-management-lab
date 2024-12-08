@@ -80,7 +80,7 @@ const App = () => {
     },
   ]);
 
- 
+
   let totalPrice = 0;
   for (let i = 0; i < zombieFighters.length; i++) {
     totalPrice += zombieFighters[i].price;
@@ -90,17 +90,21 @@ const App = () => {
   const [currentPrice, setCurrentPrice] = useState(totalPrice);
 
   const handleAddFighter = (fighter) => {
-    setTeam((prevTeam) => [...prevTeam, fighter]); 
-    setMoney((prevMoney) => prevMoney - fighter.price); 
-    setCurrentPrice((prevTotal) => prevTotal - fighter.price); 
+    if (money < fighter.price) {
+      console.log('Not enough money');
+      return;
+    }
+    setTeam((prevTeam) => [...prevTeam, fighter]);
+    setMoney((prevMoney) => prevMoney - fighter.price);
+    setCurrentPrice((prevTotal) => prevTotal - fighter.price);
   };
 
   return (
     <div>
       <h1>Zombie Fighters</h1>
-      <h2>Initial Total Price: {totalPrice} £</h2> 
-      <h2>Current Total Price: {currentPrice} £</h2> 
-      <h2>Available Money: {money} £</h2> 
+      <h2>Initial Total Price: {totalPrice} £</h2>
+      <h2>Current Total Price: {currentPrice} £</h2>
+      <h2>Available Money: {money} £</h2>
       <ul>
         {zombieFighters.map((fighter, index) => (
           <li key={index}>
