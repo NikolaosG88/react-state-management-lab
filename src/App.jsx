@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import './App.css';
+import { use } from "react";
 
 const App = () => {
 
@@ -82,12 +83,31 @@ const App = () => {
 
 
   let totalPrice = 0;
+  let totalStrength = 0;
+  let totalAgility = 0;
+  // let totalBudget = 0;
+
   for (let i = 0; i < zombieFighters.length; i++) {
     totalPrice += zombieFighters[i].price;
   }
 
+  for (let s = 0; s < zombieFighters.length; s++) {
+    totalStrength += zombieFighters[s].strength;
+  }
+
+  for (let a = 0; a < zombieFighters.length; a++) {
+    totalAgility += zombieFighters[a].agility;
+  }
+
+  // for (let b = 0; b < zombieFighters.length; b++) {
+  //   totalBudget += zombieFighters[b].price;
+  // }
+
 
   const [currentPrice, setCurrentPrice] = useState(totalPrice);
+  const [currentStrength, setCurrentStrength] = useState(0);
+  const [currentAgility, setCurrentAgility] = useState(0);
+  // const [currentBudget, setCurrentBudget] = useState(0);
 
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
@@ -97,14 +117,29 @@ const App = () => {
     setTeam((prevTeam) => [...prevTeam, fighter]);
     setMoney((prevMoney) => prevMoney - fighter.price);
     setCurrentPrice((prevTotal) => prevTotal - fighter.price);
+    setCurrentStrength((prevStrength) => prevStrength + fighter.strength);
+    setCurrentAgility((prevAgility) => prevAgility + fighter.agility);
+    // setCurrentStrength((prevBudget) => prevBudget + fighter.price);
   };
+
+  const handleRemoveFighter = (fighter) => {
+    setTeam((prevTeam) => prevTeam.filter((f) => f !== fighter));
+    setMoney((prevMoney) => prevMoney + fighter.price);
+    setCurrentStrength((prevStrength) => prevStrength - fighter.strength);
+    setCurrentAgility((prevAgility) => prevAgility - fighter.agility);
+  };
+  
 
   return (
     <div>
       <h1>Zombie Fighters</h1>
       <h2>Initial Total Price: {totalPrice} £</h2>
       <h2>Current Total Price: {currentPrice} £</h2>
-      <h2>Available Money: {money} £</h2>
+      <h2>Available Money Left: {money} £</h2>
+      <h2>Total Strength: {totalStrength} ^ </h2>
+      <h2>Teams  Agility: {totalAgility}  </h2>
+      {/* <h2>Total Strength: {totalBudget}  </h2> */}
+
       <ul>
         {zombieFighters.map((fighter, index) => (
           <li key={index}>
@@ -118,12 +153,24 @@ const App = () => {
         ))}
       </ul>
 
-      <h2>Your Team</h2>
+      <h1>Your Team</h1>
+      <h2><strong>Current Strength:</strong> <strong>{currentStrength}</strong> </h2>
+      <h2><strong>Current Agility:</strong> <strong>{currentAgility}</strong> </h2>
+    {team.length === 0 ? ( <strong><p><h2>Pick some team members!</h2></p></strong>
+     ) : ( 
       <ul>
-        {team.map((fighter, index) => (
-          <li key={index}>{fighter.name}</li>
+       {team.map((fighter, index) => (
+            <li key={index}>
+              <img src={fighter.img} alt={fighter.name} />
+              <p><strong>Name:</strong> {fighter.name}</p>
+              <p><strong>Price:</strong> {fighter.price} £</p>
+              <p><strong>Strength:</strong> {fighter.strength}</p>
+              <p><strong>Agility:</strong> {fighter.agility}</p>
+              <button onClick={() => handleRemoveFighter(fighter)}>Remove Fighter</button>
+            </li>
         ))}
       </ul>
+     )}
     </div>
   );
 }
