@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import './App.css';
-import { use } from "react";
+
 
 const App = () => {
 
@@ -99,10 +99,8 @@ const App = () => {
   }
 
 
-  const [currentPrice, setCurrentPrice] = useState(0);
   const [currentStrength, setCurrentStrength] = useState(0);
   const [currentAgility, setCurrentAgility] = useState(0);
-
 
   const handleAddFighter = (fighter) => {
     if (money < fighter.price) {
@@ -111,7 +109,6 @@ const App = () => {
     }
     setTeam((prevTeam) => [...prevTeam, fighter]);
     setMoney((prevMoney) => prevMoney - fighter.price);
-    setCurrentPrice((prevTotal) => prevTotal - fighter.price);
     setCurrentStrength((prevStrength) => prevStrength + fighter.strength);
     setCurrentAgility((prevAgility) => prevAgility + fighter.agility);
     };
@@ -123,7 +120,6 @@ const App = () => {
     setCurrentAgility((prevAgility) => prevAgility - fighter.agility);
   };
   
-
   return (
     <div>
       <h1>Zombie Fighters</h1>
